@@ -21,18 +21,16 @@ export const Carousel: React.FC = () => {
 
   const fetchData = async () => {
     setLoading(true);
-    setMovies([]);
-    setError(undefined);
-    // const response = await handleErrors(fetchBoxOffice);
-    // if (isError(response)) {
-    //   setError(error);
-    //   console.log(error);
-    //   setLoading(false);
-    //   return;
-    // }
-    // const data = (response as AxiosResponse).data;
-    // setMovies(data);
-    // setLoading(false);
+    const response = await handleErrors(fetchBoxOffice);
+    if (isError(response)) {
+      setError(error);
+      console.log(error);
+      setLoading(false);
+      return;
+    }
+    const data = (response as AxiosResponse).data;
+    setMovies(data);
+    setLoading(false);
   };
 
   const handlers = useSwipeable({
@@ -60,7 +58,7 @@ export const Carousel: React.FC = () => {
         <div className="relative w-full h-full">
           <div className="relative w-full h-[94%] overflow-hidden">
             <Skeleton height={"h-full"} width={"w-full"} />
-            <div className="absolute flex items-center justify-center bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-neutral-700 text-black text-center p-2">
+            <div className="absolute flex items-center justify-center bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black text-black text-center p-2">
               <button className="rounded-md  flex items-center justify-center text-center m-1">
                 <Skeleton height="h-10" width=" w-[300px]" />
               </button>

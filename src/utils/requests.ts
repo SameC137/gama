@@ -9,6 +9,11 @@ export interface ErrorMessage {
   message: string;
   status?: number;
 }
+
+export const axiosInstance=axios.create({
+    baseURL:process.env.NEXT_PUBLIC_API_URL
+})
+
 export const handleErrors = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   requestHandler: () => Promise<AxiosResponse<any, any>>
@@ -33,26 +38,26 @@ export const handleErrors = async (
 };
 
 
-export function isError(resp: object): resp is ErrorMessage {
+export function  isError(resp: object): resp is ErrorMessage {
     return (resp as ErrorMessage).message !== undefined;
   }
 
 export const fetchRecent = () => {
-  return axios({
-    method: "GET",
-    headers:{
-        "Content-Type":"application/json",
-    },
-    url: `${process.env.NEXT_PUBLIC_API_URL}/recent-movies`,
-  });
+  return axiosInstance.get(
+   "/recent-movies"
+  );
 };
 
 export const fetchBoxOffice = () => {
-  return axios({
-    method: "GET",
-    headers:{
-        "Content-Type":"application/json",
-    },
-    url: `${process.env.NEXT_PUBLIC_API_URL}/box-office-movies`,
-  });
+  return axiosInstance.get(
+    "/box-office-movies"
+   );
+ 
+};
+
+export const searchMovies = (term:string) => {
+  return axiosInstance.get(
+    `/filter-movie?name=${term}`
+   );
+ 
 };
