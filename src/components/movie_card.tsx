@@ -1,14 +1,12 @@
 import { MovieData } from "@/app/types";
 import React from "react";
 import { ImageWithFallback } from "./image";
-import { PlayCircleIcon } from "lucide-react";
+import { PlayIcon } from "@heroicons/react/24/solid";
+import { BlurredButton } from "./blured_button";
 
 export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
   return (
-    <div
-      className=" w-1/4 h-full shrink-0 basis-[30%]"
-      //  className="w-[144px]  h-[200px] rounded-[14px]"
-    >
+    <div className=" w-[150px]  h-[230px] shrink-0 rounded-[14px] overflow-hidden">
       <div className=" w-full h-full relative ">
         <ImageWithFallback
           src={movie.cover_img_url}
@@ -19,8 +17,10 @@ export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
           }}
           fill
         />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex p-3.5">
-          <PlayCircleIcon className="" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex ">
+          <BlurredButton style={"p-4"}>
+            <PlayIcon className="h-6 w-6 text-white" />
+          </BlurredButton>
         </div>
       </div>
     </div>

@@ -9,64 +9,30 @@ import {
 import React, { useEffect, useState } from "react";
 import { ImageWithFallback } from "./image";
 import { AxiosResponse } from "axios";
-import { Button } from "./ui/button";
 import { useSwipeable } from "react-swipeable";
+import { PlayIcon } from "@heroicons/react/16/solid";
+import { Skeleton } from "./skeleton";
 
 export const Carousel: React.FC = () => {
-  const [movies, setMovies] = useState<MovieData[]>([
-    {
-      Title: "Inception",
-      video_url: "http://example.com/inception",
-      cover_img_url:
-        "http://gama-test-1.onrender.comhttp://example.com/inception.jpg",
-      rating: 8.8,
-    },
-    {
-      Title: "Interstellar",
-      video_url: "http://example.com/interstellar",
-      cover_img_url:
-        "http://gama-test-1.onrender.comhttp://example.com/interstellar.jpg",
-      rating: 8.6,
-    },
-    {
-      Title: "The Gentlemen",
-      video_url: "http://media.w3.org/2010/05/sintel/trailer.mp4",
-      cover_img_url: "http://gama-test-1.onrender.com/public/gentlmen.jpg",
-      rating: 9.4,
-    },
-    {
-      Title: "Spy City",
-      video_url:
-        "https://www.sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4",
-      cover_img_url: "http://gama-test-1.onrender.com/public/spycity.jpg",
-      rating: 4.5,
-    },
-    {
-      Title: "Project Runway",
-      video_url: "http://media.w3.org/2010/05/sintel/trailer.mp4",
-      cover_img_url: "http://gama-test-1.onrender.com/public/runway.jpg",
-      rating: 5.4,
-    },
-    {
-      Title: "Project Greenlight 2",
-      video_url:
-        "https://www.nlm.nih.gov/web/documentation/TemplateDocumentation/video_files/IN_Intro-800.mp4",
-      cover_img_url:
-        "http://gama-test-1.onrender.com/public/greenlight_two.jpg",
-      rating: 5.6,
-    },
-  ]);
+  const [movies, setMovies] = useState<MovieData[]>([]);
   const [error, setError] = useState<ErrorMessage>();
+  const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const fetchDat = async () => {
-    const response = await handleErrors(fetchBoxOffice);
-    if (isError(response)) {
-      setError(error);
-      return;
-    }
-    const data: MovieData[] = (response as AxiosResponse).data.json();
-    setMovies(data);
+  const fetchData = async () => {
+    setLoading(true);
+    setMovies([]);
+    setError(undefined);
+    // const response = await handleErrors(fetchBoxOffice);
+    // if (isError(response)) {
+    //   setError(error);
+    //   console.log(error);
+    //   setLoading(false);
+    //   return;
+    // }
+    // const data = (response as AxiosResponse).data;
+    // setMovies(data);
+    // setLoading(false);
   };
 
   const handlers = useSwipeable({
@@ -80,12 +46,30 @@ export const Carousel: React.FC = () => {
   });
 
   useEffect(() => {
-    fetchDat();
+    fetchData();
   }, []);
 
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen">
+        {" "}
+        <div className="relative w-full h-full">
+          <div className="relative w-full h-[94%] overflow-hidden">
+            <Skeleton height={"h-full"} width={"w-full"} />
+            <div className="absolute flex items-center justify-center bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-neutral-700 text-black text-center p-2">
+              <button className="rounded-md  flex items-center justify-center text-center m-1">
+                <Skeleton height="h-10" width=" w-[300px]" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div {...handlers} className=" w-full h-screen ">
@@ -111,8 +95,11 @@ export const Carousel: React.FC = () => {
                   fill
                 />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-neutral-700 text-white p-4 text-center">
-                <Button>Watch Now</Button>
+              <div className="absolute flex items-center justify-center bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-neutral-700 text-black p-4 text-center">
+                <button className="bg-white rounded-md px-2 py-2 w-[300px] shadow-sm hover:bg-opacity-50 flex items-center justify-center text-center">
+                  <PlayIcon className="h-3 w-3 mr-2" />
+                  Watch Now
+                </button>
               </div>
             </div>
           ))}
@@ -122,8 +109,8 @@ export const Carousel: React.FC = () => {
           {movies.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full mx-1 bg-gray-300 hover:bg-gray-500 ${
-                index === currentIndex ? "bg-gray-700" : ""
+              className={`w-2 h-2 rounded-full mx-1  hover:bg-gray-800 ${
+                index === currentIndex ? "bg-white" : "bg-gray-500"
               }`}
               onClick={() => handleDotClick(index)}
             />

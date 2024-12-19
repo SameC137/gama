@@ -1,12 +1,13 @@
 import { Carousel } from "@/components/carousel";
 import { MovieList } from "@/components/movie_list";
+import { Skeleton } from "@/components/skeleton";
 import { Suspense } from "react";
 
 export default function Home() {
   return (
     <div className="grid  items-center justify-items-center min-h-screen ">
       <main className="flex flex-col flex-wrap gap-8 items-center sm:items-start min-h-screen w-screen box-border">
-        <Suspense fallback={<h1>Loading....</h1>}>
+        <Suspense fallback={<Skeleton height={"h-full"} width={"w-full"} />}>
           <Carousel />
         </Suspense>
         <Suspense>
