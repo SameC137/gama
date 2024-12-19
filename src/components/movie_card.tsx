@@ -1,10 +1,12 @@
 import { MovieData } from "@/app/types";
-import React from "react";
+import React, { useState } from "react";
 import { ImageWithFallback } from "./image";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { BlurredButton } from "./blured_button";
+import VideoPlayer from "./video_player";
 
 export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
+  const [videoOpen, setVideoOpen] = useState(false);
   return (
     <div className=" w-[150px]  h-[230px] shrink-0 rounded-[14px] overflow-hidden">
       <div className=" w-full h-full relative ">
@@ -18,7 +20,7 @@ export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
           fill
         />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex ">
-          <BlurredButton style={"p-4"}>
+          <BlurredButton style={"p-4"} onClick={() => setVideoOpen(true)}>
             <PlayIcon className="h-6 w-6 text-white" />
           </BlurredButton>
         </div>
@@ -26,6 +28,12 @@ export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
           <p className="text-sm">{movie.Title}</p>
         </div>
       </div>
+      <VideoPlayer
+        title={movie.Title}
+        src={movie.video_url}
+        open={videoOpen}
+        onClose={() => setVideoOpen(false)}
+      />
     </div>
   );
 };
