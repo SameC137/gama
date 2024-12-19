@@ -3,7 +3,7 @@ import React from "react";
 export const BlurredButton: React.FC<{
   children: React.ReactNode;
   style?: string;
-  onClick?: () => any;
+  onClick?: () => void;
 }> = ({ children, style, onClick }) => {
   return (
     <button

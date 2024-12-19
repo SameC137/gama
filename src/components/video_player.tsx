@@ -2,7 +2,6 @@
 
 import {
   ChevronLeftIcon,
-  PauseCircleIcon,
   PauseIcon,
   PlayIcon,
 } from "@heroicons/react/16/solid";
@@ -13,7 +12,7 @@ interface VideoPlayerProps {
   src: string;
   title: string;
   open: boolean;
-  onClose: () => any;
+  onClose: () => void;
 }
 
 export default function VideoPlayer({
