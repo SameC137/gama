@@ -1,4 +1,3 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import React from "react";
 import { SearchPage } from "./search_screen";
 
