@@ -34,7 +34,7 @@ export const SearchPage = () => {
       />
       {searchScreenActive && (
         <div
-          className={`min-h-screen bg-black/85  text-white p-4  w-screen top-0 left-0 fixed flex-col z-50`}
+          className={`min-h-screen bg-black/85  text-white p-4  w-screen md:w-[500px] md:min-h-min md:right-8 md:rounded-[10px]  top-0 max-sm:left-0 fixed flex-col z-50`}
         >
           <div className="flex justify-end mb-4">
             <button className="p-2">

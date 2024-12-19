@@ -22,6 +22,9 @@ export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
             <PlayIcon className="h-6 w-6 text-white" />
           </BlurredButton>
         </div>
+        <div className="max-sm:hidden  absolute bottom-0 left-1/2 -translate-x-1/2  w-full flex items-center justify-center  ">
+          <p className="text-sm">{movie.Title}</p>
+        </div>
       </div>
     </div>
   );
