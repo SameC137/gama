@@ -86,6 +86,7 @@ export const Carousel: React.FC = () => {
               className={`absolute flex gap-4 w-full h-full transition-transform duration-500 ease-in-out
             
                 bg-gradient-to-b from-[rgb(0_0_0/.87)] to-[rgba(0,0,0,.54)]
+                backdrop-blur-md
                 md:p-8
                 ${
                   index === currentIndex
