@@ -1,11 +1,15 @@
 import React from "react";
 
-export const BlurredButton: React.FC<{ children: React.ReactNode, style?:string }> = ({
-  children,
-  style
-}) => {
+export const BlurredButton: React.FC<{
+  children: React.ReactNode;
+  style?: string;
+  onClick?: () => void;
+}> = ({ children, style, onClick }) => {
   return (
-    <button className={`bg-white bg-opacity-25 backdrop-blur-[30px] text-white rounded-full shadow-sm hover:bg-opacity-50 ${style}`}>
+    <button
+      onClick={onClick}
+      className={`bg-white bg-opacity-25 backdrop-blur-[30px] text-white rounded-full shadow-sm hover:bg-opacity-50 ${style}`}
+    >
       {children}
     </button>
   );
