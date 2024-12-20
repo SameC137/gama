@@ -23,6 +23,7 @@ export default function Home({
   fallback,
 }: {
   fallback: {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     [key: string]: any;
   };
 }) {

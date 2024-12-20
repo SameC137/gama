@@ -6,6 +6,7 @@ export const SWRProvider = ({
 }: {
   children: React.ReactNode;
   fallback: {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     [key: string]: any;
   };
 }) => {
