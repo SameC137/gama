@@ -12,10 +12,14 @@ export const MovieList = ({
   title: string;
   dataPoint: string;
 }) => {
-  const { data: movies } = useSWR<MovieData[]>(dataPoint, fetcher, {
+  const { data: movies, error } = useSWR<MovieData[]>(dataPoint, fetcher, {
     suspense: true,
     fallbackData: [],
   });
+
+  if (error) {
+    throw error;
+  }
 
   if (!movies) {
     return <></>;

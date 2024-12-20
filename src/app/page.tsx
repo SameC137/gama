@@ -1,5 +1,5 @@
 import { Carousel } from "@/components/carousel";
-import { ErrorBoundary } from "@/components/error_boundary";
+import { ErrorBoundaryWithHandler } from "@/components/error_boundary";
 import { MovieList } from "@/components/movie_list";
 import { CarouselSkeleton, MovieListSkeleton } from "@/components/skeletons";
 import { SWRProvider } from "@/components/swr_provider";
@@ -21,21 +21,21 @@ export default async function Page() {
             },
           }}
         >
-          <ErrorBoundary>
+          <ErrorBoundaryWithHandler>
             <Suspense fallback={<CarouselSkeleton />}>
               <Carousel />
             </Suspense>
-          </ErrorBoundary>
-          <ErrorBoundary>
+          </ErrorBoundaryWithHandler>
+          <ErrorBoundaryWithHandler>
             <Suspense fallback={<MovieListSkeleton />}>
               <MovieList title="Recent Movies" dataPoint={"/recent-movies"} />
             </Suspense>
-          </ErrorBoundary>
-          <ErrorBoundary>
+          </ErrorBoundaryWithHandler>
+          <ErrorBoundaryWithHandler>
             <Suspense fallback={<MovieListSkeleton />}>
               <MovieList title="Box Office" dataPoint={"/box-office-movies"} />
             </Suspense>
-          </ErrorBoundary>
+          </ErrorBoundaryWithHandler>
         </SWRProvider>
       </main>
     </div>
