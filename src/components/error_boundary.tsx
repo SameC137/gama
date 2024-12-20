@@ -1,18 +1,8 @@
 "use client";
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { APIError } from "@/utils/requests";
-import { Component, ErrorInfo, ReactNode } from "react";
+import { ErrorInfo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-
-interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  error?: Error;
-}
 
 export function DefaultFallBack({
   error,
@@ -48,7 +38,7 @@ export const ErrorBoundaryWithHandler: React.FC<{
   }) => JSX.Element;
   resetFunc?: () => any;
 }> = ({ children, fallBack, resetFunc }) => {
-  const handleLogError = (error: Error, info: ErrorInfo) => {
+  const handleLogError = (error: Error) => {
     console.log("Error", error);
   };
 
