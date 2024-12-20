@@ -1,6 +1,6 @@
 "use client";
 import { MovieData } from "@/app/types";
-import { fetcher } from "@/utils/requests";
+import { APIError, fetcher } from "@/utils/requests";
 import React, { useState } from "react";
 import debounce from "lodash.debounce";
 import {
@@ -15,7 +15,7 @@ export const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchScreenActive, setSearchScreenActive] = useState(false);
 
-  const { data: searchResults } = useSWR<MovieData[]>(
+  const { data: searchResults, error } = useSWR<MovieData[], APIError>(
     `/filter-movie?name=${searchTerm}`,
     fetcher
   );
@@ -55,6 +55,7 @@ export const SearchPage = () => {
             />
           </div>
 
+          {error && <h2 className="text-white">{error.message}</h2>}
           <div className="flex-1 flex flex-col overflow-y-auto p-4 gap-[10px]">
             {searchResults?.map((result, index) => (
               <div

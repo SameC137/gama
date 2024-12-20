@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 
 export class APIError extends Error {
@@ -17,6 +17,22 @@ export class APIError extends Error {
 export const axiosInstance=axios.create({
     baseURL:process.env.NEXT_PUBLIC_API_URL
 })
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response) {
+      throw new APIError(
+        (error.response.data as {message:string}).message || 'An error occurred',
+        error.response.status
+      )
+    } else if (error.request) {
+      throw new APIError('No response received from server')
+    } else {
+      throw new APIError('Error setting up request')
+    }
+  }
+)
 
 
 

@@ -1,4 +1,5 @@
 import { Carousel } from "@/components/carousel";
+import { ErrorBoundary } from "@/components/error_boundary";
 import { MovieList } from "@/components/movie_list";
 import { CarouselSkeleton, MovieListSkeleton } from "@/components/skeletons";
 import { SWRProvider } from "@/components/swr_provider";
@@ -29,15 +30,21 @@ export default function Home({
     <div className="grid  items-center justify-items-center min-h-screen ">
       <main className="flex flex-col flex-wrap gap-8 items-center sm:items-start min-h-screen w-screen box-border">
         <SWRProvider fallback={{ fallback }}>
-          <Suspense fallback={<CarouselSkeleton />}>
-            <Carousel />
-          </Suspense>
-          <Suspense fallback={<MovieListSkeleton />}>
-            <MovieList title="Recent Movies" dataPoint={"/recent-movies"} />
-          </Suspense>
-          <Suspense fallback={<MovieListSkeleton />}>
-            <MovieList title="Box Office" dataPoint={"/box-office-movies"} />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<CarouselSkeleton />}>
+              <Carousel />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Suspense fallback={<MovieListSkeleton />}>
+              <MovieList title="Recent Movies" dataPoint={"/recent-movies"} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <Suspense fallback={<MovieListSkeleton />}>
+              <MovieList title="Box Office" dataPoint={"/box-office-movies"} />
+            </Suspense>
+          </ErrorBoundary>
         </SWRProvider>
       </main>
     </div>

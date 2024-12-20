@@ -5,12 +5,16 @@ import { fetcher } from "@/utils/requests";
 import useSWR from "swr";
 import { MovieData } from "@/app/types";
 
-export const MovieList = ({ title, dataPoint }: { title: string; dataPoint: string }) => {
+export const MovieList = ({
+  title,
+  dataPoint,
+}: {
+  title: string;
+  dataPoint: string;
+}) => {
   const { data: movies } = useSWR<MovieData[]>(dataPoint, fetcher, {
     suspense: true,
   });
-
-  console.log(dataPoint, movies, title);
 
   if (!movies) {
     return <></>;
