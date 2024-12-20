@@ -12,7 +12,7 @@ export default async function Page() {
 
   return (
     <div className="grid  items-center justify-items-center min-h-screen ">
-      <main className="flex flex-col flex-wrap gap-8 items-center sm:items-start min-h-screen w-screen box-border">
+      <main className="flex flex-col flex-wrap gap-4 items-center sm:items-start min-h-screen w-screen box-border">
         <SWRProvider
           fallback={{
             fallback: {
