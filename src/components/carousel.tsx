@@ -49,13 +49,11 @@ export const Carousel: React.FC = () => {
           className="relative w-full h-full overflow-hidden  max-sm:bg-none "
           style={{
             background: `url(${movies[currentIndex]?.cover_img_url})  no-repeat center center / cover `,
-            // backgroundPosition: "center",
-            // backgroundSize: "cover",
           }}
         >
           {movies.map((slide, index) => (
             <div
-              key={index}
+              key={`${slide.Title} ${index}`}
               className={`absolute flex gap-4 w-full h-full transition-transform duration-500 ease-in-out
             
                 bg-gradient-to-b from-[rgb(0_0_0/.87)] to-[rgba(0,0,0,.54)]
@@ -66,9 +64,11 @@ export const Carousel: React.FC = () => {
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 translate-x-full"
                 }`}
-              onClick={() => setVideoOpen(true)}
             >
-              <div className="max-sm:w-full max-sm:h-full w-[25%] h-[80%] relative md:rounded-3xl overflow-hidden">
+              <div
+                className="max-sm:w-full max-sm:h-full w-[25%] h-[80%] relative md:rounded-3xl overflow-hidden cursor-pointer"
+                onClick={() => setVideoOpen(true)}
+              >
                 <ImageWithFallback
                   src={slide.cover_img_url}
                   alt={`${slide.Title} cover`}
@@ -80,9 +80,14 @@ export const Carousel: React.FC = () => {
                 />
               </div>
               <div className="max-sm:hidden w-[70%] h-[70%] flex flex-col p-[10px] justify-center ">
-                <h2 className="text-white text-6xl">{slide.Title}</h2>
+                <h2
+                  className="text-white text-6xl cursor-pointer"
+                  onClick={() => setVideoOpen(true)}
+                >
+                  {slide.Title}
+                </h2>
                 {slide.rating && (
-                  <div className=" flex">
+                  <div className="flex w-60">
                     <StarIcon className="h-5 w-5 mr-3 text-yellow-300" />
                     <p className="text-white"> {slide.rating}</p>
                   </div>
@@ -90,7 +95,10 @@ export const Carousel: React.FC = () => {
               </div>
 
               <div className="hidden absolute max-sm:flex items-center justify-center bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-neutral-700 text-black p-4 text-center">
-                <button className="bg-white rounded-md px-2 py-2 w-[300px] shadow-sm hover:bg-opacity-50 flex items-center justify-center text-center">
+                <button
+                  className="bg-white rounded-md px-2 py-2 w-[300px] shadow-sm hover:bg-opacity-50 flex items-center justify-center text-center"
+                  onClick={() => setVideoOpen(true)}
+                >
                   <PlayIcon className="h-3 w-3 mr-2" />
                   Watch Now
                 </button>

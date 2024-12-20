@@ -28,9 +28,21 @@ export const SearchPage = () => {
   return (
     <>
       <MagnifyingGlassIcon
-        className="h-6 w-6"
+        className="h-6 w-6 md:hidden"
         onClick={() => setSearchScreenActive(true)}
       />
+      <div
+        className="hidden md:block relative"
+        onClick={() => setSearchScreenActive(true)}
+      >
+        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <input
+          type="text"
+          placeholder="What do you want to watch?"
+          className="w-full bg-neutral-800 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-grey-500"
+        />
+      </div>
+
       {searchScreenActive && (
         <div
           className={`min-h-screen bg-black/85  text-white p-4  w-screen md:w-[500px] md:min-h-min md:right-8 md:rounded-[10px]  top-0 max-sm:left-0 fixed flex-col z-50`}
