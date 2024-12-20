@@ -13,8 +13,9 @@ export const Carousel: React.FC = () => {
   const { data: movies, error } = useSWR<MovieData[]>(
     "/box-office-movies",
     fetcher,
-    { suspense: true }
+    { suspense: true, fallbackData: [] }
   );
+
   const length = movies?.length || 0;
 
   const handlers = useSwipeable({
