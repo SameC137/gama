@@ -28,12 +28,14 @@ export const MovieCard: React.FC<{ movie: MovieData }> = ({ movie }) => {
           <p className="text-sm">{movie.Title}</p>
         </div>
       </div>
-      <VideoPlayer
-        title={movie.Title}
-        src={movie.video_url}
-        open={videoOpen}
-        onClose={() => setVideoOpen(false)}
-      />
+      {videoOpen && (
+        <VideoPlayer
+          title={movie.Title}
+          src={movie.video_url}
+          open={videoOpen}
+          onClose={() => setVideoOpen(false)}
+        />
+      )}
     </div>
   );
 };

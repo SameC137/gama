@@ -6,9 +6,11 @@ import { ImageWithFallback } from "./image";
 import { useSwipeable } from "react-swipeable";
 import { PlayIcon, StarIcon } from "@heroicons/react/16/solid";
 import useSWR from "swr";
+import VideoPlayer from "./video_player";
 
 export const Carousel: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [videoOpen, setVideoOpen] = useState(false);
 
   const { data: movies, error } = useSWR<MovieData[]>(
     "/box-office-movies",
@@ -31,6 +33,10 @@ export const Carousel: React.FC = () => {
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
   };
+
+  if (error) {
+    throw error;
+  }
 
   if (!movies) {
     return;
@@ -60,6 +66,7 @@ export const Carousel: React.FC = () => {
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 translate-x-full"
                 }`}
+              onClick={() => setVideoOpen(true)}
             >
               <div className="max-sm:w-full max-sm:h-full w-[25%] h-[80%] relative md:rounded-3xl overflow-hidden">
                 <ImageWithFallback
@@ -91,6 +98,14 @@ export const Carousel: React.FC = () => {
             </div>
           ))}
         </div>
+        {videoOpen && (
+          <VideoPlayer
+            title={movies[currentIndex].Title}
+            src={movies[currentIndex].video_url}
+            open={videoOpen}
+            onClose={() => setVideoOpen(false)}
+          />
+        )}
 
         <div className="md:bottom-0 absolute left-1/2 -translate-x-1/2 flex p-3.5">
           {movies.map((_, index) => (

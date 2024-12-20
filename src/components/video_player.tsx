@@ -40,6 +40,9 @@ export default function VideoPlayer({
   const handleTimeUpdate = () => {
     if (videoRef.current) {
       setCurrentTime(videoRef.current.currentTime);
+      if (videoRef.current.currentTime === videoRef.current.duration) {
+        setIsPlaying(!isPlaying);
+      }
     }
   };
 
@@ -72,8 +75,12 @@ export default function VideoPlayer({
 
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-50 flex justify-center items-center">
-      <div className="relative w-full h-full md:w-[60%] md:h-[70%] md:rounded-[20px] overflow-hidden">
+      <div
+        className="relative w-full h-full md:w-[60%] md:h-[70%] md:rounded-[20px] overflow-hidden"
+        onClick={togglePlay}
+      >
         <video
+          key={src}
           ref={videoRef}
           className="w-full h-full object-cover"
           onTimeUpdate={handleTimeUpdate}
@@ -96,7 +103,7 @@ export default function VideoPlayer({
           {!isPlaying && (
             <BlurredButton
               style={
-                "p-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                "md:hidden p-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
               }
               onClick={togglePlay}
             >
@@ -119,20 +126,22 @@ export default function VideoPlayer({
             {/* Time */}
             <div className="flex justify-between text-white text-sm">
               <span className="flex justify-items-center items-center">
-                {isPlaying ? (
-                  <PauseIcon
-                    className="w-4 h-4 text-white mr-1"
-                    onClick={togglePlay}
-                  />
-                ) : (
-                  <PlayIcon
-                    className="w-4 h-4 text-white mr-1"
-                    onClick={togglePlay}
-                  />
-                )}
+                <div className={"hidden md:block"}>
+                  {isPlaying ? (
+                    <PauseIcon
+                      className="w-4 h-4 text-white mr-1"
+                      onClick={togglePlay}
+                    />
+                  ) : (
+                    <PlayIcon
+                      className="w-4 h-4 text-white mr-1"
+                      onClick={togglePlay}
+                    />
+                  )}
+                </div>
                 {formatTime(currentTime)}
               </span>
-              <span>{formatTime(duration)}</span>
+              <span>-{formatTime(duration - currentTime)}</span>
             </div>
           </div>
         </div>

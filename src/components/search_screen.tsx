@@ -16,7 +16,7 @@ export const SearchPage = () => {
   const [searchScreenActive, setSearchScreenActive] = useState(false);
 
   const { data: searchResults, error } = useSWR<MovieData[], APIError>(
-    `/filter-movie?name=${searchTerm}`,
+    searchTerm ? `/filter-movie?name=${searchTerm}` : null,
     fetcher
   );
 
