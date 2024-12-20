@@ -1,6 +1,6 @@
 "use client";
-import { MovieData } from "@/app/types";
-import { APIError, fetcher } from "@/utils/requests";
+import { APIError, MovieData } from "@/app/types";
+import { fetcher } from "@/utils/requests";
 import React, { useState } from "react";
 import debounce from "lodash.debounce";
 import {
