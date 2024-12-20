@@ -29,7 +29,7 @@ export const MovieList = ({
     <div className="w-full overflow-hidden md:flex justify-center">
       <div className=" md:w-[500px]">
         <h2 className="p-2">{title}</h2>
-        <div className="flex gap-x-4 w-full overflow-x-auto box-border p-2">
+        <div className="flex gap-x-4 w-full overflow-x-auto box-border p-2 no-scrollbar">
           {movies.map((movie, index) => (
             <MovieCard key={index} movie={movie} />
           ))}
