@@ -114,6 +114,10 @@ The playground for the api endpoints can be found here https://gama-test-1.onren
 
     Created a reusable component ImageWithFallback that handles image loading and fallback scenarios.
 
+5. Add error handling to video player
+
+    Created a reusable video player that shows a user friendly error message when video playback has error.
+
 
 ### Folder Structure
 ```md

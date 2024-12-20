@@ -4,9 +4,11 @@ import {
   ChevronLeftIcon,
   PauseIcon,
   PlayIcon,
+  VideoCameraSlashIcon,
 } from "@heroicons/react/16/solid";
 import { useState, useRef } from "react";
 import { BlurredButton } from "./blured_button";
+import { Skeleton } from "./skeleton";
 
 interface VideoPlayerProps {
   src: string;
@@ -24,6 +26,8 @@ export default function VideoPlayer({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
@@ -73,6 +77,10 @@ export default function VideoPlayer({
     return;
   }
 
+  const handleLoadedData = () => {
+    setIsLoading(false);
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black/80 z-50 flex justify-center items-center">
       <div
@@ -85,8 +93,27 @@ export default function VideoPlayer({
           className="w-full h-full object-cover"
           onTimeUpdate={handleTimeUpdate}
           onLoadedMetadata={handleLoadedMetadata}
+          onLoadedData={handleLoadedData}
+          onError={() => {
+            setError(true);
+            setIsLoading(false);
+          }}
           src={src}
         />
+        {error && (
+          <div className="absolute inset-0 ">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col text-white  text-center items-center">
+              <VideoCameraSlashIcon className="h-8 w-8 " />
+              <h1>Video could not be played</h1>
+            </div>
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="absolute inset-0 ">
+            <Skeleton width="w-full" height="h-full" />
+          </div>
+        )}
 
         <div className="absolute inset-0 ">
           <div className="absolute top-1 left-1 p-4 transform -translate-x -translate-y">
@@ -100,7 +127,7 @@ export default function VideoPlayer({
             </BlurredButton>
           </div>
 
-          {!isPlaying && (
+          {!isPlaying && !error && !isLoading && (
             <BlurredButton
               style={
                 "md:hidden p-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -123,22 +150,23 @@ export default function VideoPlayer({
               />
             </div>
 
-            {/* Time */}
             <div className="flex justify-between text-white text-sm">
               <span className="flex justify-items-center items-center">
-                <div className={"hidden md:block"}>
-                  {isPlaying ? (
-                    <PauseIcon
-                      className="w-4 h-4 text-white mr-1"
-                      onClick={togglePlay}
-                    />
-                  ) : (
-                    <PlayIcon
-                      className="w-4 h-4 text-white mr-1"
-                      onClick={togglePlay}
-                    />
-                  )}
-                </div>
+                {!error && (
+                  <div className={"hidden md:block"}>
+                    {isPlaying ? (
+                      <PauseIcon
+                        className="w-4 h-4 text-white mr-1"
+                        onClick={togglePlay}
+                      />
+                    ) : (
+                      <PlayIcon
+                        className="w-4 h-4 text-white mr-1"
+                        onClick={togglePlay}
+                      />
+                    )}
+                  </div>
+                )}
                 {formatTime(currentTime)}
               </span>
               <span>-{formatTime(duration - currentTime)}</span>
