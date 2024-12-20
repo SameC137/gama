@@ -1,63 +1,53 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 
-interface ValidationError {
-  message: string;
-  errors: Record<string, string[]>;
+
+export class APIError extends Error {
+  constructor(
+    message: string,
+    public status?: number,
+    public code?: string
+  ) {
+    super(message)
+    this.name = 'APIError'
+  }
 }
 
-export interface ErrorMessage {
-  message: string;
-  status?: number;
-}
+
 
 export const axiosInstance=axios.create({
     baseURL:process.env.NEXT_PUBLIC_API_URL
 })
 
-export const handleErrors = async (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  requestHandler: () => Promise<AxiosResponse<any, any>>
-) => {
-  try {
-    const response = await requestHandler();
-    return response;
-  } catch (error) {
-    if (axios.isAxiosError<ValidationError, Record<string, unknown>>(error)) {
-      const errorMessage: ErrorMessage = {
-        status: error.status,
-        message: error.message,
-      };
-      return errorMessage;
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response) {
+      throw new APIError(
+        (error.response.data as {message:string}).message || 'An error occurred',
+        error.response.status
+      )
+    } else if (error.request) {
+      throw new APIError('No response received from server')
     } else {
-      console.log(error);
-      return {
-        message:"Error occurred"
-      }
+      throw new APIError('Error setting up request')
     }
   }
-};
+)
 
 
-export function  isError(resp: object): resp is ErrorMessage {
-    return (resp as ErrorMessage).message !== undefined;
+
+export const fetcher= async(key:string)=> {
+  try {
+    const response = await axiosInstance.get(key)
+    // await new Promise(resolve => setTimeout(resolve, 5000))
+    return response.data
+  } catch (error) {
+    if (error instanceof APIError) {
+      console.log(error)
+      throw error
+    }
+    console.log(error)
+    throw new APIError('Failed to fetch')
   }
+}
 
-export const fetchRecent = () => {
-  return axiosInstance.get(
-   "/recent-movies"
-  );
-};
-
-export const fetchBoxOffice = () => {
-  return axiosInstance.get(
-    "/box-office-movies"
-   );
- 
-};
-
-export const searchMovies = (term:string) => {
-  return axiosInstance.get(
-    `/filter-movie?name=${term}`
-   );
- 
-};

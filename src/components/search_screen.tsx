@@ -1,6 +1,6 @@
 "use client";
 import { MovieData } from "@/app/types";
-import { searchMovies } from "@/utils/requests";
+import { APIError, fetcher } from "@/utils/requests";
 import React, { useState } from "react";
 import debounce from "lodash.debounce";
 import {
@@ -8,21 +8,20 @@ import {
   StarIcon,
   XMarkIcon,
 } from "@heroicons/react/16/solid";
+import useSWR from "swr";
+import { ImageWithFallback } from "./image";
 
 export const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchScreenActive, setSearchScreenActive] = useState(false);
 
-  const [searchResults, setSearchResults] = useState<MovieData[]>([]);
+  const { data: searchResults, error } = useSWR<MovieData[], APIError>(
+    `/filter-movie?name=${searchTerm}`,
+    fetcher
+  );
 
   const handleSearch = async (query: string) => {
-    try {
-      const response = await searchMovies(query);
-      const data: MovieData[] = response.data;
-      setSearchResults(data);
-    } catch (error) {
-      console.log(error);
-    }
+    setSearchTerm(query);
   };
   const debouncedSearch = debounce(handleSearch, 1000);
 
@@ -49,26 +48,28 @@ export const SearchPage = () => {
             <input
               type="text"
               placeholder="Search"
-              value={searchTerm}
               onChange={(e) => {
-                setSearchTerm(e.target.value);
                 debouncedSearch(e.target.value);
               }}
               className="w-full bg-neutral-800 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-grey-500"
             />
           </div>
 
+          {error && <h2 className="text-white">{error.message}</h2>}
           <div className="flex-1 flex flex-col overflow-y-auto p-4 gap-[10px]">
-            {searchResults.map((result, index) => (
+            {searchResults?.map((result, index) => (
               <div
                 key={index}
                 className="flex gap-[10px] bg-neutral-800 backdrop-blur-[30px] p-2 rounded-[10px]"
               >
-                <img
-                  src={result.cover_img_url}
-                  alt={result.Title}
-                  className="w-24 h-32 rounded-lg"
-                />
+                <div className="w-24 h-32 rounded-lg  overflow-hidden">
+                  <ImageWithFallback
+                    src={result.cover_img_url}
+                    alt={result.Title}
+                    width={"96"}
+                    height={"128"}
+                  />
+                </div>
                 <div className="flex flex-col p-[10px]">
                   <h2 className="text-white text-lg">{result.Title}</h2>
                   {result.rating && (

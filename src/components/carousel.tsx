@@ -1,72 +1,39 @@
 "use client";
 import { MovieData } from "@/app/types";
-import {
-  ErrorMessage,
-  fetchBoxOffice,
-  handleErrors,
-  isError,
-} from "@/utils/requests";
-import React, { useEffect, useState } from "react";
+import { fetcher } from "@/utils/requests";
+import React, { useState } from "react";
 import { ImageWithFallback } from "./image";
-import { AxiosResponse } from "axios";
 import { useSwipeable } from "react-swipeable";
 import { PlayIcon, StarIcon } from "@heroicons/react/16/solid";
-import { Skeleton } from "./skeleton";
+import useSWR from "swr";
 
 export const Carousel: React.FC = () => {
-  const [movies, setMovies] = useState<MovieData[]>([]);
-  const [error, setError] = useState<ErrorMessage>();
-  const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const response = await handleErrors(fetchBoxOffice);
-    if (isError(response)) {
-      setError(error);
-      console.log(error);
-      setLoading(false);
-      return;
-    }
-    const data = (response as AxiosResponse).data;
-    setMovies(data);
-    setLoading(false);
-  };
+  const { data: movies, error } = useSWR<MovieData[]>(
+    "/box-office-movies",
+    fetcher,
+    { suspense: true, fallbackData: [] }
+  );
+
+  const length = movies?.length || 0;
 
   const handlers = useSwipeable({
     onSwipedLeft: () =>
-      setCurrentIndex(currentIndex == movies.length - 1 ? 0 : currentIndex + 1),
+      setCurrentIndex(currentIndex == length - 1 ? 0 : currentIndex + 1),
     onSwipedRight: () =>
-      setCurrentIndex(currentIndex == 0 ? movies.length - 1 : currentIndex - 1),
+      setCurrentIndex(currentIndex == 0 ? length - 1 : currentIndex - 1),
     swipeDuration: 500,
     preventScrollOnSwipe: true,
     trackMouse: true,
   });
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
   };
 
-  if (loading) {
-    return (
-      <div className="w-full h-screen">
-        {" "}
-        <div className="relative w-full h-full">
-          <div className="relative w-full h-[94%] overflow-hidden">
-            <Skeleton height={"h-full"} width={"w-full"} />
-            <div className="absolute flex items-center justify-center bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black text-black text-center p-2">
-              <button className="rounded-md  flex items-center justify-center text-center m-1">
-                <Skeleton height="h-10" width=" w-[300px]" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+  if (!movies) {
+    return;
   }
 
   return (
@@ -137,18 +104,7 @@ export const Carousel: React.FC = () => {
           ))}
         </div>
       </div>
-      {/* {movies.map((m) => (
-        <div key={m.Title}>
-          <h1>{m.Title}</h1>
-          <h2>{m.rating}</h2>
-          <ImageWithFallback
-            src={m.cover_img_url}
-            alt={`${m.Title} cover`}
-            width={500}
-            height={600}
-          />
-        </div>
-      ))} */}
+
       {error && <h1>Error Occured : {error.message}</h1>}
     </div>
   );
