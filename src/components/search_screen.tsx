@@ -38,6 +38,7 @@ export const SearchPage = () => {
         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
         <input
           type="text"
+          title="search"
           placeholder="What do you want to watch?"
           className="w-full bg-neutral-800 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-grey-500"
         />
@@ -59,6 +60,7 @@ export const SearchPage = () => {
             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
+              title="search"
               placeholder="Search"
               onChange={(e) => {
                 debouncedSearch(e.target.value);
