@@ -5,8 +5,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
  Live Demo:[https://gama-iota.vercel.app/](https://gama-iota.vercel.app/)
 
 ## Screenshots
-
-[If applicable, include screenshots or GIFs showcasing your project]
+<img src="public/desktop_screenshot.png" alt="Gamma Preview Desktop" width="200" height="auto"/>
+<img src="public/mobile_screenshot.png" alt="Gamma Preview Mobile" width="90"/>
 
 ## Prerequisites
 
@@ -37,11 +37,11 @@ To run in Development mode
    
 To run in production mode: continued from step 3 above
 
-2. Build the project using 
+4. Build the project using 
     ```sh
         npm run build
     ```
-3. Then if the build completes successfully run it using
+5. Then if the build completes successfully run it using
     ```sh
        npm run start
     ```
@@ -50,6 +50,69 @@ To run in production mode: continued from step 3 above
 ## Performance Optimization Techniques
 
 Project utilizes ssr to preload the data for the requests and passes it to the swr provider. This allows for the best of both worlds in that the data is prefetched but has the ability to be refreshed on the client side due to staleness. The SWR library provides strong caching capabilities. SWR is a strategy to first return the data from cache (stale), then send the fetch request (revalidate), and finally come with the up-to-date data. 
+
+## API Integration
+API endpoints
+- https://gama-test-1.onrender.com/box-office-movies
+    - Expected response when status 200 is an array of movies in format
+
+        ```
+        [{
+            Title: string;
+            video_url: string;
+            cover_img_url: string;
+            rating: number;
+            },...]
+        ```
+- https://gama-test-1.onrender.com/recent-movies
+     - Expected response when status 200 is a json array of movies in format
+
+        ```
+        [{
+            Title: string;
+            video_url: string;
+            cover_img_url: string;
+            rating: number;
+            },...]
+        ```
+-  https://gama-test-1.onrender.com/filter-movie- used with a query parameter name that represents the movie name with the final url looking like https://gama-test-1.onrender.com/filter-movie/filter-movie?name=movie_name
+        
+    - Expected response when response is a json  array of movies in format
+
+        ```
+        [{
+            Title: string;
+            video_url: string;
+            cover_img_url: string;
+            rating: number;
+            },...]
+        ```
+
+    - Expected Response when status 404
+      ```
+        {
+            message:string
+        }
+        ```
+The playground for the api endpoints can be found here https://gama-test-1.onrender.com/api-docs/
+
+## Error Handling Strategy
+1. Axios Interceptor
+
+    There is  an Axios interceptor to catch global errors that occur during API requests. This is used to convert all the errors into the same format that allows us to handle the errors easier in upstream components. In the presence of log tracking services this can be used to push all the errors to the services as required. 
+
+2. Error Boundaries
+
+    Utilizing an Error Boundary component to catch errors within specific parts of the application, which can be used to display a more user friendly error message and allows a reset attempt. Major components such at the movie lists and carousel are wrapped in this error boundary. This component can also be used to send tracking logs to centralized services. This is especially useful to detect crashes and receive a stacktrace.
+
+3. error.js File
+
+    Created a dedicated error.tsx file within the relevant route folders.
+    This file will be rendered by Next.js when an uncaught error occurs during server-side rendering (SSR) or client-side rendering (CSR).
+
+4. Create a Custom Image Component
+
+    Created a reusable component ImageWithFallback that handles image loading and fallback scenarios.
 
 
 ### Folder Structure
