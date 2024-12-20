@@ -15,16 +15,13 @@ export const Carousel: React.FC = () => {
     fetcher,
     { suspense: true }
   );
-
-  if (!movies) {
-    return <></>;
-  }
+  const length = movies?.length || 0;
 
   const handlers = useSwipeable({
     onSwipedLeft: () =>
-      setCurrentIndex(currentIndex == movies.length - 1 ? 0 : currentIndex + 1),
+      setCurrentIndex(currentIndex == length - 1 ? 0 : currentIndex + 1),
     onSwipedRight: () =>
-      setCurrentIndex(currentIndex == 0 ? movies.length - 1 : currentIndex - 1),
+      setCurrentIndex(currentIndex == 0 ? length - 1 : currentIndex - 1),
     swipeDuration: 500,
     preventScrollOnSwipe: true,
     trackMouse: true,
@@ -33,6 +30,10 @@ export const Carousel: React.FC = () => {
   const handleDotClick = (index: number) => {
     setCurrentIndex(index);
   };
+
+  if (!movies) {
+    return;
+  }
 
   return (
     <div {...handlers} className=" w-full h-screen ">
