@@ -1,17 +1,5 @@
+import { APIError } from "@/app/types";
 import axios, { AxiosError } from "axios";
-
-
-export class APIError extends Error {
-  constructor(
-    message: string,
-    public status?: number,
-    public code?: string
-  ) {
-    super(message)
-    this.name = 'APIError'
-  }
-}
-
 
 
 export const axiosInstance=axios.create({

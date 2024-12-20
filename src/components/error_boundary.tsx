@@ -1,6 +1,6 @@
 "use client";
+import { APIError } from "@/app/types";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { APIError } from "@/utils/requests";
 import { ErrorInfo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
